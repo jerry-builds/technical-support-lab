@@ -1,6 +1,6 @@
 # Technical support lab: multi-node Proxmox environment, hardened and documented
 
-**Showcase page:** https://jerry-builds.github.io/homelab-docs/
+**Showcase page:** https://jerry-builds.github.io/technical-support-lab/
 
 The technical support lab I run in Oregon: multiple Proxmox VE 9 hosts (two at the time of writing), 28 LXC containers, a virtualized OPNsense firewall, and the networking, DNS, remote access, identity, backup and power around them. I audited it the way I'd audit someone else's environment, fixed what I found, and **tested every fix from the side a failure or an attacker would come from**.
 

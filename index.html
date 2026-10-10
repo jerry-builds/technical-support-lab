@@ -8,12 +8,12 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Technical support lab: audited, hardened, and tested from the outside">
 <meta property="og:description" content="Multiple Proxmox nodes, 28 containers, zero inbound admin ports. Seven fixes, each with before, after and proof.">
-<meta property="og:url" content="https://jerry-builds.github.io/homelab-docs/">
-<meta property="og:image" content="https://jerry-builds.github.io/homelab-docs/assets/og.png">
+<meta property="og:url" content="https://jerry-builds.github.io/technical-support-lab/">
+<meta property="og:image" content="https://jerry-builds.github.io/technical-support-lab/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://jerry-builds.github.io/homelab-docs/assets/og.png">
+<meta name="twitter:image" content="https://jerry-builds.github.io/technical-support-lab/assets/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -120,7 +120,7 @@ footer a{color:var(--ink)}
  <p class="lede">Multiple Proxmox nodes, 28 containers, a virtualized firewall, and no inbound ports for administration. In September 2026 I audited it as if it were someone else's environment, fixed what I found, and proved each fix from the side a failure or an attacker would come from.</p>
  <div class="ctas">
   <a class="btn primary" href="#fixes">See the seven fixes ↓</a>
-  <a class="btn" href="https://github.com/jerry-builds/homelab-docs">Read the docs on GitHub ↗</a>
+  <a class="btn" href="https://github.com/jerry-builds/technical-support-lab">Read the docs on GitHub ↗</a>
  </div>
  <div class="stats">
   <div class="stat"><b>2</b><span>Proxmox VE 9 nodes</span></div>
@@ -158,7 +158,7 @@ footer a{color:var(--ink)}
 <section id="fixes"><div class="wrap">
  <div class="eyebrow">Hardening log · completed 2026-09-25</div>
  <h2>Seven fixes, each with before, after and proof</h2>
- <p class="sub">The full write-up, with the reasoning behind each change, is in <a href="https://github.com/jerry-builds/homelab-docs/blob/main/hardening.md">hardening.md</a>.</p>
+ <p class="sub">The full write-up, with the reasoning behind each change, is in <a href="https://github.com/jerry-builds/technical-support-lab/blob/main/hardening.md">hardening.md</a>.</p>
 
  <div class="fixes">
   <div class="fix wide">
@@ -240,7 +240,7 @@ footer a{color:var(--ink)}
    <tr><td><b>Cloudflare Tunnel</b></td><td>Public web ingress for two services</td><td>Outbound-only connector, TLS and DDoS handled upstream, no port forward</td></tr>
   </tbody>
  </table>
- <p class="more">Known limitation, written down rather than hidden: the LAN uses the most common home /24, so it can collide with a remote network's range. The options are renumbering the LAN or using 4via6. <a href="https://github.com/jerry-builds/homelab-docs/blob/main/remote-access.md">remote-access.md ↗</a></p>
+ <p class="more">Known limitation, written down rather than hidden: the LAN uses the most common home /24, so it can collide with a remote network's range. The options are renumbering the LAN or using 4via6. <a href="https://github.com/jerry-builds/technical-support-lab/blob/main/remote-access.md">remote-access.md ↗</a></p>
 </div></section>
 
 <section id="runbooks"><div class="wrap">
@@ -248,9 +248,9 @@ footer a{color:var(--ink)}
  <h2>Written so it can be run at 2 a.m.</h2>
  <p class="sub">Each runbook has checks before and after. A step without a way to confirm it worked isn't finished.</p>
  <div class="runbooks">
-  <a class="rb" href="https://github.com/jerry-builds/homelab-docs/blob/main/runbooks/restore-from-backup.md"><div class="k">Recovery</div><h3>Restore from backup ↗</h3><p>Pick the right run, decrypt, verify checksums, restore per service, and prove it with a login.</p></a>
-  <a class="rb" href="https://github.com/jerry-builds/homelab-docs/blob/main/runbooks/ups-power-loss.md"><div class="k">Power</div><h3>Power loss and UPS ↗</h3><p>What happens on battery, the safe tests, the one command not to run, and the recovery order.</p></a>
-  <a class="rb" href="https://github.com/jerry-builds/homelab-docs/blob/main/runbooks/tailscale-new-device.md"><div class="k">Access</div><h3>Add a device to the tailnet ↗</h3><p>Enroll, then prove access matches the ACL: hostname loads, SSH blocked, exit node switches.</p></a>
+  <a class="rb" href="https://github.com/jerry-builds/technical-support-lab/blob/main/runbooks/restore-from-backup.md"><div class="k">Recovery</div><h3>Restore from backup ↗</h3><p>Pick the right run, decrypt, verify checksums, restore per service, and prove it with a login.</p></a>
+  <a class="rb" href="https://github.com/jerry-builds/technical-support-lab/blob/main/runbooks/ups-power-loss.md"><div class="k">Power</div><h3>Power loss and UPS ↗</h3><p>What happens on battery, the safe tests, the one command not to run, and the recovery order.</p></a>
+  <a class="rb" href="https://github.com/jerry-builds/technical-support-lab/blob/main/runbooks/tailscale-new-device.md"><div class="k">Access</div><h3>Add a device to the tailnet ↗</h3><p>Enroll, then prove access matches the ACL: hostname loads, SSH blocked, exit node switches.</p></a>
  </div>
 </div></section>
 
