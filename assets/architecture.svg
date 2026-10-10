@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-labelledby="t d" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif">
-  <title id="t">Homelab architecture</title>
-  <desc id="d">Two Proxmox nodes on a 10 GbE LAN. Node two runs the OPNsense firewall, AdGuard Home DNS and a reverse proxy. Node one runs 28 containers including identity and secrets services, a Tailscale subnet router and exit node, a Twingate connector and a Cloudflare Tunnel connector. Remote access uses only outbound overlays; there are no inbound admin rules. Critical services are backed up daily, encrypted, to the data pool. Both nodes are on UPS with NUT.</desc>
+  <title id="t">Technical support lab architecture</title>
+  <desc id="d">Proxmox nodes on a 10 GbE LAN. Node two runs the OPNsense firewall, AdGuard Home DNS and a reverse proxy. Node one runs 28 containers including identity and secrets services, a Tailscale subnet router and exit node, a Twingate connector and a Cloudflare Tunnel connector. Remote access uses only outbound overlays; there are no inbound admin rules. Critical services are backed up daily, encrypted, to the data pool. Both nodes are on UPS with NUT.</desc>
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#23272e"/></marker>
     <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9622b"/></marker>
@@ -23,8 +23,8 @@
   </defs>
   <rect class="bg" width="1200" height="800" rx="10"/>
 
-  <text x="40" y="44" class="m">HOMELAB · ARCHITECTURE</text>
-  <text x="40" y="70" style="fill:#1f2328;font-size:22px;font-weight:700">Two Proxmox nodes, one flat LAN, no inbound admin ports</text>
+  <text x="40" y="44" class="m">TECHNICAL SUPPORT LAB · ARCHITECTURE</text>
+  <text x="40" y="70" style="fill:#1f2328;font-size:22px;font-weight:700">Multi-node Proxmox environment, one flat LAN, no inbound admin ports</text>
 
   <!-- External row -->
   <rect class="ext" x="40" y="100" width="230" height="58" rx="8"/>

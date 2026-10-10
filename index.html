@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Homelab · Hardened and verified</title>
-<meta name="description" content="A two-node Proxmox home lab audited like production: seven security and reliability fixes, each tested from the outside, with architecture, runbooks and verified results.">
+<title>Technical Support Lab · Hardened and verified</title>
+<meta name="description" content="A multi-node Proxmox technical support lab audited like production: seven security and reliability fixes, each tested from the outside, with architecture, runbooks and verified results.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Homelab: audited, hardened, and tested from the outside">
-<meta property="og:description" content="Two Proxmox nodes, 28 containers, zero inbound admin ports. Seven fixes, each with before, after and proof.">
+<meta property="og:title" content="Technical support lab: audited, hardened, and tested from the outside">
+<meta property="og:description" content="Multiple Proxmox nodes, 28 containers, zero inbound admin ports. Seven fixes, each with before, after and proof.">
 <meta property="og:url" content="https://jerry-builds.github.io/homelab-docs/">
 <meta property="og:image" content="https://jerry-builds.github.io/homelab-docs/assets/og.png">
 <meta property="og:image:width" content="1200">
@@ -110,14 +110,14 @@ footer a{color:var(--ink)}
 </head>
 <body>
 <nav><div class="wrap">
- <a class="brand" href="#top">HOMELAB <span>/ case study</span></a>
+ <a class="brand" href="#top">TECHNICAL SUPPORT LAB <span>/ case study</span></a>
  <div class="links"><a href="#architecture">Architecture</a><a href="#method">Method</a><a href="#fixes">Fixes</a><a href="#access">Remote access</a><a href="#runbooks">Runbooks</a></div>
 </div></nav>
 
 <header id="top"><div class="wrap">
  <div class="eyebrow">Case study · Infrastructure and support</div>
- <h1>A home lab run like production: audited, hardened, and <em>tested from the outside</em>.</h1>
- <p class="lede">Two Proxmox nodes, 28 containers, a virtualized firewall, and no inbound ports for administration. In September 2026 I audited it as if it were someone else's environment, fixed what I found, and proved each fix from the side a failure or an attacker would come from.</p>
+ <h1>A technical support lab run like production: audited, hardened, and <em>tested from the outside</em>.</h1>
+ <p class="lede">Multiple Proxmox nodes, 28 containers, a virtualized firewall, and no inbound ports for administration. In September 2026 I audited it as if it were someone else's environment, fixed what I found, and proved each fix from the side a failure or an attacker would come from.</p>
  <div class="ctas">
   <a class="btn primary" href="#fixes">See the seven fixes ↓</a>
   <a class="btn" href="https://github.com/jerry-builds/homelab-docs">Read the docs on GitHub ↗</a>
@@ -134,7 +134,7 @@ footer a{color:var(--ink)}
 
 <section id="architecture"><div class="wrap">
  <div class="eyebrow">Architecture</div>
- <h2>Two nodes, one flat LAN, three outbound overlays</h2>
+ <h2>Multi-node, one flat LAN, three outbound overlays</h2>
  <p class="sub">The edge host runs the firewall and DNS, so the network stays up while the main host is down for maintenance. Everything I reach remotely comes in through connections that dial <em>out</em>, so the firewall has no inbound rules for administration at all.</p>
  <figure class="diagram">
   <img src="assets/architecture.svg" alt="Architecture diagram: node two runs OPNsense, AdGuard Home and Nginx Proxy Manager; node one runs 28 containers including the Tailscale and Twingate connector, cloudflared, identity and secrets, databases, AI with GPU passthrough, apps and media; both on a 10 GbE LAN; remote devices reach the LAN through the Tailscale overlay; critical services are backed up encrypted to the data pool.">

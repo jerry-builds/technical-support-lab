@@ -1,16 +1,16 @@
-# Homelab: two Proxmox nodes, hardened and documented
+# Technical support lab: multi-node Proxmox environment, hardened and documented
 
 **Showcase page:** https://jerry-builds.github.io/homelab-docs/
 
-The lab I run at home in Oregon: two Proxmox VE 9 hosts, 28 LXC containers, a virtualized OPNsense firewall, and the networking, DNS, remote access, identity, backup and power around them. I audited it the way I'd audit someone else's environment, fixed what I found, and **tested every fix from the side a failure or an attacker would come from**.
+The technical support lab I run in Oregon: multiple Proxmox VE 9 hosts (two at the time of writing), 28 LXC containers, a virtualized OPNsense firewall, and the networking, DNS, remote access, identity, backup and power around them. I audited it the way I'd audit someone else's environment, fixed what I found, and **tested every fix from the side a failure or an attacker would come from**.
 
-![Architecture: two Proxmox nodes on a 10 GbE LAN, OPNsense on the edge host, 28 containers on the main host, remote access only through outbound overlays](assets/architecture.svg)
+![Architecture: Proxmox nodes on a 10 GbE LAN, OPNsense on the edge host, 28 containers on the main host, remote access only through outbound overlays](assets/architecture.svg)
 
 ## At a glance
 
 | | |
 |---|---|
-| **Compute** | Two Proxmox VE 9 nodes. Main host: Ryzen 9 5950X, 64 GB, RTX 2080 shared into containers. Edge host: runs the firewall and DNS, so the network stays up when the main host is down |
+| **Compute** | Multiple Proxmox VE 9 nodes (two at the time of writing). Main host: Ryzen 9 5950X, 64 GB, RTX 2080 shared into containers. Edge host: runs the firewall and DNS, so the network stays up when the main host is down |
 | **Network** | Managed Layer 3 10 GbE switch, OPNsense VM, split DNS (AdGuard Home + Unbound, DNS-over-HTTPS upstream), separate NAT'd IoT subnet, ~70 DHCP reservations named by role |
 | **Remote access** | Tailscale (subnet router, exit node, tag-based ACL with policy tests), Twingate, Cloudflare Tunnel. **No inbound firewall rules for administration** |
 | **Identity and secrets** | Authentik SSO, Vaultwarden, Infisical |
