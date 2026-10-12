@@ -37,6 +37,7 @@ The technical support lab I run in Oregon: multiple Proxmox VE 9 hosts (two at t
 | [node-one.md](node-one.md) | The main host: hardware, storage tiers, containers by function, GPU passthrough |
 | [node-two.md](node-two.md) | The edge host: OPNsense VM, AdGuard Home, reverse proxy |
 | [operations.md](operations.md) | The audit findings, backups, power, the drive failure, monitoring |
+| [automation/](automation/README.md) | Stuck-item alerts: monday.com polled by n8n on the LAN, posted to Lambda behind API Gateway, announced in Slack with the AWS request id. Built and verified 2026-10-11 |
 | **Runbooks** | |
 | [restore-from-backup.md](runbooks/restore-from-backup.md) | Decrypt, verify and restore a service |
 | [ups-power-loss.md](runbooks/ups-power-loss.md) | What happens on battery, safe tests, recovery order |

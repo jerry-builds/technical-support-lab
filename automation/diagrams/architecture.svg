@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-labelledby="t d" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title id="t">Stuck-item alert architecture</title>
+  <desc id="d">A monday.com board is polled every two minutes by n8n, self-hosted on the technical support lab LAN with no inbound rules. n8n posts each new Stuck item to an API Gateway REST API in AWS us-east-2 that requires an API key and enforces a usage plan. The Lambda function lab-webhook, Python 3.13 on arm64, validates the body, writes one JSON line to CloudWatch Logs and returns a request id. n8n then posts the alert with that request id to a Slack channel. Every connection from the LAN is outbound.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#23272e"/></marker>
+    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9622b"/></marker>
+    <style>
+      .bg{fill:#f4f2ee}
+      .t{fill:#1f2328;font-size:15px;font-weight:600}
+      .s{fill:#5b616b;font-size:12.5px}
+      .m{font-family:'IBM Plex Mono',Menlo,Consolas,monospace;fill:#5b616b;font-size:11.5px;letter-spacing:.06em}
+      .h{fill:#1f2328;font-size:13px;font-weight:600}
+      .box{fill:#fff;stroke:#cfc9bf;stroke-width:1.2}
+      .node{fill:#fbfaf8;stroke:#23272e;stroke-width:1.6}
+      .ext{fill:#fff;stroke:#9aa0a8;stroke-width:1.2;stroke-dasharray:4 3}
+      .hot{fill:#fbe9df;stroke:#d9622b;stroke-width:1.4}
+      .ln{stroke:#23272e;stroke-width:1.8;fill:none}
+      .ov{stroke:#d9622b;stroke-width:1.8;fill:none;stroke-dasharray:7 5}
+      .gy{stroke:#8b9098;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+      .lab{fill:#d9622b;font-size:12px;font-weight:600}
+      .labg{fill:#5b616b;font-size:12px}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="800" rx="10"/>
+
+  <text x="40" y="44" class="m">TECHNICAL SUPPORT LAB · AUTOMATION</text>
+  <text x="40" y="70" style="fill:#1f2328;font-size:22px;font-weight:700">Stuck-item alerts: monday.com to n8n to AWS to Slack, outbound only</text>
+
+  <!-- External SaaS row -->
+  <rect class="ext" x="40" y="100" width="300" height="58" rx="8"/>
+  <text x="56" y="124" class="t">monday.com board</text>
+  <text x="56" y="143" class="s">Status column set to Stuck</text>
+
+  <rect class="ext" x="860" y="100" width="300" height="58" rx="8"/>
+  <text x="876" y="124" class="t">Slack channel</text>
+  <text x="876" y="143" class="s">app with chat:write scopes only</text>
+
+  <!-- n8n on the LAN -->
+  <rect class="node" x="40" y="215" width="300" height="270" rx="10"/>
+  <text x="58" y="240" class="m">LAN · N8N, SELF-HOSTED</text>
+
+  <rect class="box" x="58" y="254" width="264" height="54" rx="7"/>
+  <text x="72" y="276" class="h">Schedule + monday query</text>
+  <text x="72" y="295" class="s">GraphQL for Stuck items, every 2 min</text>
+
+  <rect class="box" x="58" y="318" width="264" height="54" rx="7"/>
+  <text x="72" y="340" class="h">Split Out + Remove Duplicates</text>
+  <text x="72" y="359" class="s">memory keyed on item id + change time</text>
+
+  <rect class="box" x="58" y="382" width="264" height="54" rx="7"/>
+  <text x="72" y="404" class="h">Set + HTTP Request</text>
+  <text x="72" y="423" class="s">JSON body, key in x-api-key header</text>
+
+  <rect class="hot" x="58" y="446" width="264" height="28" rx="5"/>
+  <text x="70" y="465" class="s" style="fill:#a2451b">Pull only. No inbound rules on the firewall</text>
+
+  <!-- AWS group -->
+  <rect class="node" x="440" y="215" width="720" height="270" rx="10"/>
+  <text x="458" y="240" class="m">AWS · US-EAST-2</text>
+  <text x="1142" y="240" class="m" text-anchor="end">ONE FUNCTION, ONE FRONT DOOR</text>
+
+  <rect class="box" x="458" y="254" width="220" height="214" rx="7"/>
+  <text x="472" y="276" class="h">API Gateway REST API</text>
+  <text x="472" y="297" class="s">POST /lab/webhook</text>
+  <text x="472" y="316" class="s">API key required</text>
+  <text x="472" y="335" class="s">Usage plan: 5 req/s, burst 10</text>
+  <text x="472" y="354" class="s">1000 requests per day</text>
+  <text x="472" y="373" class="s">403 without a key</text>
+  <text x="472" y="392" class="s">429 over the plan</text>
+  <rect class="hot" x="472" y="406" width="192" height="46" rx="5"/>
+  <text x="482" y="424" class="s" style="fill:#a2451b">Key is per-client, so it</text>
+  <text x="482" y="442" class="s" style="fill:#a2451b">rotates without a code change</text>
+
+  <rect class="box" x="706" y="254" width="220" height="214" rx="7"/>
+  <text x="720" y="276" class="h">Lambda lab-webhook</text>
+  <text x="720" y="297" class="s">Python 3.13 on arm64</text>
+  <text x="720" y="316" class="s">128 MB, 10 s timeout</text>
+  <text x="720" y="335" class="s">413 if the body is over 64 KB</text>
+  <text x="720" y="354" class="s">400 if not a JSON object</text>
+  <text x="720" y="373" class="s">200 with a request id</text>
+  <rect class="hot" x="720" y="406" width="192" height="46" rx="5"/>
+  <text x="730" y="424" class="s" style="fill:#a2451b">Execution role can only</text>
+  <text x="730" y="442" class="s" style="fill:#a2451b">write logs, nothing else</text>
+
+  <rect x="954" y="254" width="188" height="214" rx="7" fill="#efece6" stroke="#cfc9bf"/>
+  <text x="968" y="276" class="h">CloudWatch Logs</text>
+  <text x="968" y="297" class="s">one JSON line per</text>
+  <text x="968" y="316" class="s">accepted request</text>
+  <text x="968" y="345" class="s">The request id in Slack</text>
+  <text x="968" y="364" class="s">matches a log line here,</text>
+  <text x="968" y="383" class="s">so a chat alert can be</text>
+  <text x="968" y="402" class="s">traced in seconds</text>
+
+  <!-- Design choices row -->
+  <rect class="box" x="40" y="530" width="355" height="92" rx="8"/>
+  <text x="56" y="554" class="h">Polling instead of a monday webhook</text>
+  <text x="56" y="574" class="s">monday only delivers webhooks to public URLs.</text>
+  <text x="56" y="592" class="s">Opening a port would undo the remote-access</text>
+  <text x="56" y="610" class="s">design. A 2 minute poll is fine for a Stuck alert.</text>
+
+  <rect class="box" x="422" y="530" width="355" height="92" rx="8"/>
+  <text x="438" y="554" class="h">API key plus usage plan</text>
+  <text x="438" y="574" class="s">The key is the cheap layer: no drive-by traffic,</text>
+  <text x="438" y="592" class="s">one thing to revoke. The usage plan caps what</text>
+  <text x="438" y="610" class="s">any bug on the n8n side can run up or flood.</text>
+
+  <rect class="box" x="805" y="530" width="355" height="92" rx="8"/>
+  <text x="821" y="554" class="h">Secrets stay in Infisical</text>
+  <text x="821" y="574" class="s">API key, webhook URL, Slack bot token and</text>
+  <text x="821" y="592" class="s">monday token. None of them sit in a file or</text>
+  <text x="821" y="610" class="s">in the exported n8n workflow.</text>
+
+  <!-- Connectors -->
+  <path class="gy" d="M120,215 L120,160" marker-end="url(#a)"/>
+  <text x="130" y="192" class="labg">n8n polls the board</text>
+
+  <path class="gy" d="M300,215 L300,186 L1010,186 L1010,160" marker-end="url(#a)"/>
+  <text x="655" y="180" class="labg" text-anchor="middle">n8n posts the alert, with the AWS request id in the message</text>
+
+  <path class="gy" d="M340,345 L456,345" marker-end="url(#a)"/>
+  <text x="398" y="334" class="labg" text-anchor="middle">HTTPS POST</text>
+  <text x="398" y="364" class="labg" text-anchor="middle">x-api-key</text>
+
+  <path class="ln" d="M678,345 L704,345" marker-end="url(#a)"/>
+  <path class="ln" d="M926,345 L952,345" marker-end="url(#a)"/>
+
+  <!-- Legend -->
+  <line x1="40" y1="700" x2="80" y2="700" class="ln"/><text x="88" y="704" class="s">Inside AWS</text>
+  <line x1="220" y1="700" x2="260" y2="700" class="gy"/><text x="268" y="704" class="s">Outbound from the LAN (n8n only ever dials out)</text>
+  <rect class="hot" x="660" y="691" width="24" height="16" rx="3"/><text x="692" y="704" class="s">Deliberate guard rail, verified end to end 2026-10-11</text>
+  <text x="40" y="748" class="m">THE GATEWAY HOSTNAME, LAN ADDRESSES, KEYS, BOARD AND CHANNEL IDS ARE OMITTED ON PURPOSE</text>
+</svg>

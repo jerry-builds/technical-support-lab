@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-labelledby="t d" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title id="t">The paths that do not end in Slack</title>
+  <desc id="d">Sequence diagram with three lifelines, n8n, API Gateway and Lambda, showing four stopped paths. A duplicate tick is dropped by n8n's Remove Duplicates node and nothing is posted. A request without a valid API key is refused by API Gateway with 403 and Lambda never runs. A request over the usage plan is refused with 429 and Lambda never runs. A body that is not a JSON object reaches Lambda and is refused with 400.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#23272e"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b9098"/></marker>
+    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9622b"/></marker>
+    <style>
+      .bg{fill:#f4f2ee}
+      .t{fill:#1f2328;font-size:15px;font-weight:600}
+      .s{fill:#5b616b;font-size:12.5px}
+      .m{font-family:'IBM Plex Mono',Menlo,Consolas,monospace;fill:#5b616b;font-size:11.5px;letter-spacing:.06em}
+      .h{fill:#1f2328;font-size:13px;font-weight:600}
+      .box{fill:#fff;stroke:#cfc9bf;stroke-width:1.2}
+      .node{fill:#fbfaf8;stroke:#23272e;stroke-width:1.6}
+      .ext{fill:#fff;stroke:#9aa0a8;stroke-width:1.2;stroke-dasharray:4 3}
+      .hot{fill:#fbe9df;stroke:#d9622b;stroke-width:1.4}
+      .ln{stroke:#23272e;stroke-width:1.8;fill:none}
+      .ov{stroke:#d9622b;stroke-width:1.8;fill:none;stroke-dasharray:7 5}
+      .gy{stroke:#8b9098;stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+      .lab{fill:#d9622b;font-size:12px;font-weight:600}
+      .labg{fill:#5b616b;font-size:12px}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="900" rx="10"/>
+
+  <text x="40" y="44" class="m">TECHNICAL SUPPORT LAB · AUTOMATION · STOPPED PATHS</text>
+  <text x="40" y="70" style="fill:#1f2328;font-size:22px;font-weight:700">Four ways a tick ends before Slack, and where each one stops</text>
+
+  <!-- Lifeline heads -->
+  <rect class="node" x="160" y="110" width="180" height="50" rx="8"/>
+  <text x="250" y="131" class="t" text-anchor="middle">n8n</text>
+  <text x="250" y="150" class="s" text-anchor="middle">self-hosted on the LAN</text>
+
+  <rect class="box" x="510" y="110" width="180" height="50" rx="8"/>
+  <text x="600" y="131" class="t" text-anchor="middle">API Gateway</text>
+  <text x="600" y="150" class="s" text-anchor="middle">API key + usage plan</text>
+
+  <rect class="box" x="860" y="110" width="180" height="50" rx="8"/>
+  <text x="950" y="131" class="t" text-anchor="middle">Lambda</text>
+  <text x="950" y="150" class="s" text-anchor="middle">lab-webhook</text>
+
+  <!-- Path bands -->
+  <rect class="box" x="40" y="190" width="1120" height="130" rx="8" fill="#fbfaf8"/>
+  <rect class="box" x="40" y="340" width="1120" height="130" rx="8" fill="#fbfaf8"/>
+  <rect class="box" x="40" y="490" width="1120" height="130" rx="8" fill="#fbfaf8"/>
+  <rect class="box" x="40" y="640" width="1120" height="150" rx="8" fill="#fbfaf8"/>
+  <!-- Lifelines -->
+  <path class="gy" d="M250,160 L250,800"/>
+  <path class="gy" d="M600,160 L600,800"/>
+  <path class="gy" d="M950,160 L950,800"/>
+
+  <!-- PATH · DUPLICATE -->
+  <text x="56" y="212" class="m">PATH · DUPLICATE TICK</text>
+  <rect class="box" x="130" y="228" width="240" height="56" rx="6"/>
+  <text x="142" y="246" class="h">Remove Duplicates drops it</text>
+  <text x="142" y="263" class="s">same item id, same status change</text>
+  <text x="142" y="279" class="s">time as a run already alerted on</text>
+  <rect x="520" y="234" width="160" height="36" fill="#fff"/>
+  <text x="600" y="246" class="s" text-anchor="middle">nothing leaves the LAN</text>
+  <text x="600" y="264" class="s" text-anchor="middle">nothing posted to Slack</text>
+  <rect x="300" y="291" width="490" height="16" fill="#fff"/>
+  <text x="780" y="303" class="s" text-anchor="end">Most ticks look like this. The pipeline costs nothing while the board is quiet.</text>
+  <text x="1144" y="212" class="m" text-anchor="end">STOPS IN N8N</text>
+
+  <!-- PATH · 403 -->
+  <text x="56" y="362" class="m">PATH · 403</text>
+  <text x="1144" y="362" class="m" text-anchor="end">STOPS AT THE GATEWAY</text>
+  <text x="425" y="392" class="s" text-anchor="middle">POST without a key, or a wrong key</text>
+  <path class="ln" d="M252,400 L596,400" marker-end="url(#a)"/>
+  <text x="425" y="432" class="s" text-anchor="middle">403 Forbidden</text>
+  <path class="gy" d="M598,440 L254,440" marker-end="url(#ag)"/>
+  <rect class="hot" x="770" y="384" width="360" height="40" rx="6"/>
+  <text x="782" y="401" class="s" style="fill:#a2451b">Lambda never runs. The key is per-client, so it</text>
+  <text x="782" y="417" class="s" style="fill:#a2451b">can be rotated or cut without touching code.</text>
+
+  <!-- PATH · 429 -->
+  <text x="56" y="512" class="m">PATH · 429</text>
+  <text x="1144" y="512" class="m" text-anchor="end">STOPS AT THE GATEWAY</text>
+  <text x="425" y="542" class="s" text-anchor="middle">more than 5 req/s, burst 10, or 1000 a day</text>
+  <path class="ln" d="M252,550 L596,550" marker-end="url(#a)"/>
+  <text x="425" y="582" class="s" text-anchor="middle">429 Too Many Requests</text>
+  <path class="gy" d="M598,590 L254,590" marker-end="url(#ag)"/>
+  <rect class="hot" x="770" y="534" width="360" height="40" rx="6"/>
+  <text x="782" y="551" class="s" style="fill:#a2451b">Lambda never runs. A stuck loop on the n8n side</text>
+  <text x="782" y="567" class="s" style="fill:#a2451b">cannot run up the bill or flood the channel.</text>
+
+  <!-- PATH · 400 -->
+  <text x="56" y="662" class="m">PATH · 400</text>
+  <text x="1144" y="662" class="m" text-anchor="end">STOPS IN THE FUNCTION</text>
+  <text x="425" y="692" class="s" text-anchor="middle">POST with a valid key, body is not a JSON object</text>
+  <path class="ln" d="M252,700 L596,700" marker-end="url(#a)"/>
+  <text x="775" y="692" class="s" text-anchor="middle">key and plan pass, invoke</text>
+  <path class="ln" d="M602,700 L946,700" marker-end="url(#a)"/>
+  <text x="775" y="744" class="s" text-anchor="middle">400 Bad Request</text>
+  <path class="gy" d="M948,752 L604,752" marker-end="url(#ag)"/>
+  <text x="425" y="744" class="s" text-anchor="middle">400 Bad Request</text>
+  <path class="gy" d="M598,752 L254,752" marker-end="url(#ag)"/>
+  <rect class="hot" x="800" y="706" width="330" height="24" rx="6"/>
+  <text x="812" y="722" class="s" style="fill:#a2451b">cheap to check, keeps the log clean enough to grep</text>
+
+  <!-- Legend -->
+  <line x1="40" y1="846" x2="80" y2="846" class="ln"/><text x="88" y="850" class="s">Request</text>
+  <line x1="160" y1="846" x2="200" y2="846" class="gy"/><text x="208" y="850" class="s">Reply</text>
+  <rect class="hot" x="270" y="837" width="24" height="16" rx="3"/><text x="302" y="850" class="s">Why it stops there, by design</text>
+  <text x="1160" y="850" class="m" text-anchor="end">HOSTNAMES, KEYS AND IDS OMITTED ON PURPOSE</text>
+</svg>

@@ -1,0 +1,293 @@
+{
+  "name": "monday Stuck -> AWS webhook -> Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "n-0001",
+      "name": "Every 2 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.monday.com/v2",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mondayComApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "API-Version",
+              "value": "2024-10"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: \"{ boards(ids:[YOUR_BOARD_ID]){ name items_page(limit:50, query_params:{rules:[{column_id:\\\"project_status\\\", compare_value:[2]}]}){ items{ id name updated_at column_values(ids:[\\\"project_status\\\",\\\"project_owner\\\",\\\"date\\\"]){ id text ... on StatusValue { updated_at } } } } } }\" }) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "n-0002",
+      "name": "Find Stuck items (monday)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "mondayComApi": {
+          "name": "monday.com lab PAT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data.boards[0].items_page.items",
+        "options": {}
+      },
+      "id": "n-0003",
+      "name": "One item per row",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "logic": "removeItemsWithAlreadySeenKeyValues",
+        "dedupeValue": "={{ $json.id }}:{{ ($json.column_values || []).find(c => c.id === 'project_status')?.updated_at ?? $json.updated_at }}",
+        "options": {
+          "scope": "node",
+          "historySize": 1000
+        }
+      },
+      "id": "n-0004",
+      "name": "Only newly Stuck",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1",
+              "name": "source",
+              "value": "n8n",
+              "type": "string"
+            },
+            {
+              "id": "f2",
+              "name": "event",
+              "value": "status_changed",
+              "type": "string"
+            },
+            {
+              "id": "f3",
+              "name": "item",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "f4",
+              "name": "item_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f5",
+              "name": "status",
+              "value": "Stuck",
+              "type": "string"
+            },
+            {
+              "id": "f6",
+              "name": "owner",
+              "value": "={{ ($json.column_values || []).find(c => c.id === 'project_owner')?.text ?? 'unassigned' }}",
+              "type": "string"
+            },
+            {
+              "id": "f7",
+              "name": "due",
+              "value": "={{ ($json.column_values || []).find(c => c.id === 'date')?.text ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f8",
+              "name": "board",
+              "value": "Zapier_Workflow",
+              "type": "string"
+            },
+            {
+              "id": "f9",
+              "name": "relayed_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0005",
+      "name": "Build payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR-API-ID.execute-api.us-east-2.amazonaws.com/lab/webhook",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "n-0006",
+      "name": "POST to AWS Lambda webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "AWS lab webhook key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "message",
+        "operation": "post",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "YOUR_CHANNEL_ID"
+        },
+        "text": "=:rotating_light: *Stuck on monday.com*: {{ $('Build payload').item.json.item }} (owner {{ $('Build payload').item.json.owner }}, due {{ $('Build payload').item.json.due || 'none' }})\nLogged to AWS, request {{ $json.request_id }}.",
+        "otherOptions": {}
+      },
+      "id": "n-0007",
+      "name": "Alert #agents (Slack)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1320,
+        0
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "slackApi": {
+          "name": "Slack n8n lab alerts bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 2 minutes": {
+      "main": [
+        [
+          {
+            "node": "Find Stuck items (monday)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Stuck items (monday)": {
+      "main": [
+        [
+          {
+            "node": "One item per row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One item per row": {
+      "main": [
+        [
+          {
+            "node": "Only newly Stuck",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only newly Stuck": {
+      "main": [
+        [
+          {
+            "node": "Build payload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Build payload": {
+      "main": [
+        [
+          {
+            "node": "POST to AWS Lambda webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST to AWS Lambda webhook": {
+      "main": [
+        [
+          {
+            "node": "Alert #agents (Slack)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
